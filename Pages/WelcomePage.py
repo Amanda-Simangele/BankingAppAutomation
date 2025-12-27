@@ -13,7 +13,9 @@ class WelcomePage:
     logOutButton_xpath = '//button[@ng-show="logout" and @ng-click="byebye()"]'
     accountSelect_ID = "accountSelect"
     transactionsButton_xpath = '//button[@ng-class="btnClass1" and @ng-click="transactions()" ]'
-
+    withdrawlButton_xpath = '//button[@ng-class="btnClass3" and @ng-click="withdrawl()"]'
+    balanceAmount_xpath = '(//strong[@class="ng-binding"])[2]'
+    toWithdrawButton_xpath = '//button[@type="submit" and @class="btn btn-default"]'
 
     def __init__(self, driver, timeout=10):
         self.driver = driver
@@ -26,6 +28,12 @@ class WelcomePage:
             EC.element_to_be_clickable((By.ID, self.accountSelect_ID))
         )
         Select(account_select).select_by_visible_text(account_number)
+
+    def getOriginalBalanceAmount(self):
+        balance_amount = self.wait.until(
+            EC.visibility_of_element_located((By.XPATH, self.balanceAmount_xpath))
+        )
+        return balance_amount.text
 
     def clickSelectDepositButton(self):
         deposit_button = self.wait.until(
@@ -48,6 +56,8 @@ class WelcomePage:
         )
         deposit_money_button.click()
 
+
+
     def getSuccessMessage(self):
         success_message = self.wait.until(
             EC.visibility_of_element_located((By.XPATH, self.successMessage_xpath))
@@ -65,3 +75,22 @@ class WelcomePage:
             EC.element_to_be_clickable((By.XPATH, self.transactionsButton_xpath))
         )
         transactionsButton.click()
+
+
+    def clickWithdrawlButton(self):
+        withdrawlButton = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, self.withdrawlButton_xpath))
+        )
+        withdrawlButton.click()
+
+    def clickToWithdrawButton(self):
+        toWithdrawButton = self.wait.until(
+            EC.element_to_be_clickable((By.XPATH, self.toWithdrawButton_xpath))
+        )
+        toWithdrawButton.click()
+
+    def getBalanceAmountafterWithdral(self):
+        balance_amount = self.wait.until(
+            EC.visibility_of_element_located((By.XPATH, self.balanceAmount_xpath))
+        )
+        return balance_amount.text
