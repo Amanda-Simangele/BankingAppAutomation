@@ -1,76 +1,44 @@
-from time import sleep
 
 import pytest
-from selenium import webdriver
-
-from Pages.HomePage import HomePage
-from Pages.LoginPage import LoginPage
-from Pages.TransactionPage import TransactionPage
 from Pages.WelcomePage import WelcomePage
-from Utils.conftest import setup
+from Utils.Common_tests import logintest, depositMoneyTest
 
 
-def test_case1(setup):
-    driver = setup
-    home_page = HomePage(driver)
-    home_page.clickCustomerLoginButton()
-    login_page = LoginPage(driver)
-    login_page.selectUsername()
-    login_page.clickLoginButton()
+#@pytest.mark.dev
+def test_case1(driver):
+    logintest(driver)
     welcome_page = WelcomePage(driver)
     welcome_page.clickSelectDepositButton()
     welcome_page.enterAmount("1000")
     welcome_page.clickDepositMoneyButton()
     message = welcome_page.getSuccessMessage()
+    #allure.attach(driver.get_screenshot_as_png(), name="deposit sucessful",
+     #             attachment_type=allure.attachment_type.PNG)
     assert message == "Deposit Successful", "depossit failed"
     welcome_page.clickLogOutButton()
 
-
+'''
+@pytest.mark.dev
 def test_case2(setup):
     driver = setup
-    home_page = HomePage(driver)
-    home_page.clickCustomerLoginButton()
-    login_page = LoginPage(driver)
-    login_page.selectUsername()
-    login_page.clickLoginButton()
+    logintest(driver)
     welcome_page = WelcomePage(driver)
     welcome_page.selectAccount("1004")
-    welcome_page.clickSelectDepositButton()
-    welcome_page.enterAmount("500")
-    welcome_page.clickDepositMoneyButton()
-    message = welcome_page.getSuccessMessage()
-    assert message == "Deposit Successful", "depossit failed"
+    depositMoneyTest(driver, "1500")
     welcome_page.selectAccount("1005")
-    welcome_page.clickSelectDepositButton()
-    welcome_page.enterAmount("500")
-    welcome_page.clickDepositMoneyButton()
-    message = welcome_page.getSuccessMessage()
-    assert message == "Deposit Successful", "depossit failed"
+    depositMoneyTest(driver, "1500")
     welcome_page.selectAccount("1006")
-    welcome_page.clickSelectDepositButton()
-    welcome_page.enterAmount("500")
-    welcome_page.clickDepositMoneyButton()
-    message = welcome_page.getSuccessMessage()
-    assert message == "Deposit Successful", "depossit failed"
+    depositMoneyTest(driver, "1500")
     welcome_page.clickLogOutButton()
 
-
+@pytest.mark.dev
 def test_case3(setup):
     driver = setup
-    home_page = HomePage(driver)
-    home_page.clickCustomerLoginButton()
-    login_page = LoginPage(driver)
-    login_page.selectUsername()
-    login_page.clickLoginButton()
+    logintest(driver)
     welcome_page = WelcomePage(driver)
     welcome_page.selectAccount("1004")
     originalAmount = welcome_page.getOriginalBalanceAmount()
-    welcome_page.clickSelectDepositButton()
-    sleep(5)
-    welcome_page.enterAmount("31459")
-    welcome_page.clickDepositMoneyButton()
-    message = welcome_page.getSuccessMessage()
-    assert message == "Deposit Successful", "deposit failed"
+    depositMoneyTest(driver, "31459")
     welcome_page.clickTransactionsButton()
     transcation_page = TransactionPage(driver)
     amount = transcation_page.getTransactionAmount()
@@ -95,7 +63,7 @@ def test_case3(setup):
     withdrawAmount = transcation_page.getTransactionAmountByRow(2)
     assert withdrawAmount == "31459", "wrong withdrawal amount"
     welcome_page.clickLogOutButton()
-
+'''
 
 
 
